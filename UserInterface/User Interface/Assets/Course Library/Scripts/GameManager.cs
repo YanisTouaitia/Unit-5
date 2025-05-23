@@ -8,22 +8,19 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    
+
     public GameObject[] targetPrefabs;
     public TextMeshProUGUI scoreText;
     private int score;
-    private float spawnRate = 1.0f;
+    public float spawnRate = 1.0f;
     public TextMeshProUGUI gameOverText;
     public bool isGameActive;
     public Button restartButton;
+    public GameObject titleScreen;
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SpawnTarget());
-        score = 0;
-        UpdateScore(0);
-        isGameActive = true;
-       
+
     }
 
     IEnumerator SpawnTarget()
@@ -33,7 +30,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(spawnRate);
             int index = Random.Range(0, targetPrefabs.Count());
             Instantiate(targetPrefabs[index]);
-            
+
         }
     }
     public void UpdateScore(int scoreToAdd)
@@ -50,5 +47,14 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void StartGame(int difficulty)
+    {
+        spawnRate /= difficulty;
+        StartCoroutine(SpawnTarget());
+        score = 0;
+        UpdateScore(0);
+        isGameActive = true;
+        titleScreen.SetActive(false);
     }
 }
